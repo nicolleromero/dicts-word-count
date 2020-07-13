@@ -1,5 +1,6 @@
 import re
 import sys
+from collections import Counter
 
 
 def count_words():
@@ -51,7 +52,7 @@ def sorted_count_words_trickier():
     highest_word_count_alpha = []
     temp = []
     num = high_count
-    
+
     while num >= 1:
 
         for word in highest_word_count:
@@ -67,8 +68,43 @@ def sorted_count_words_trickier():
     return highest_word_count_alpha
 
 
+# Changed to using collections here
+
+def using_collections_counter():
+
+    words = re.findall(r'\w+', open(str(sys.argv[1])).read().lower())
+    
+    highest_word_count = Counter(words).most_common()
+
+    return sort_by_count_then_alpha(highest_word_count)
+
+
+
+def sort_by_count_then_alpha(highest_word_count):
+
+    high_count = highest_word_count[0][1]
+
+    highest_word_count_alpha = []
+    temp = []
+    num = high_count
+
+    while num >= 1:
+
+        for word in highest_word_count:
+
+            if word[1] == num:
+                temp.append(word)
+
+        highest_word_count_alpha.extend(sorted(temp, key=lambda x: x[0]))
+
+        temp = []
+        num -= 1
+
+    return highest_word_count_alpha
 
 
 # print(count_words())
 # print(sorted_count_words())
-print(sorted_count_words_trickier())
+# print(sorted_count_words_trickier())
+print(using_collections_counter())
+
